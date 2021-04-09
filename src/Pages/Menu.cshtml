@@ -1,0 +1,62 @@
+﻿@page "/menu"
+@model Davepermen.Website.Fitness.Pages.MenuModel
+
+<section left>
+    @if (User.Identity.IsAuthenticated == false)
+    {
+        <h1>login</h1>
+        <form action="/user/login" method="post">
+            <input type="text" name="username" placeholder="username">
+            <input type="password" name="password" placeholder="password">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="login">
+        </form>
+    }
+    else
+    {
+        <h1>@User.Identity.Name</h1>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="10">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 10 pushups">
+        </form>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="20">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 20 pushups">
+        </form>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="30">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 30 pushups">
+        </form>
+        <br>
+        <form action="/user/logout" method="post">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="logout">
+        </form>
+    }
+</section>
+
+<section right>
+    @if (User.Identity.IsAuthenticated == false)
+    {
+        <h1>register</h1>
+        <form action="/user/register" method="post">
+            <input type="text" name="username" placeholder="username">
+            <input type="password" name="password" placeholder="password">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="login">
+        </form>
+    }
+    <!--<h1>show specific stats</h1>
+    <form action="/">
+        <select name="user" asp-items="Model.Users.OrderBy(user => user).Select(user => new SelectListItem(user, user))"></select>
+        <select name="year" asp-items="Model.Years.OrderByDescending(year => year).Select(year => new SelectListItem(year.ToString(), year.ToString()))"></select>
+        <select name="training" asp-items="Model.Trainings.OrderBy(training => training).Select(training => new SelectListItem(training, training))"></select>
+        <input type="submit" value="show">
+    </form>-->
+</section>

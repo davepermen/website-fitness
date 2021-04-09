@@ -1,0 +1,94 @@
+﻿@page "/"
+@model Davepermen.Website.Fitness.Pages.IndexModel
+
+@{
+    var firstDayNextYear = new DateTime(DateTime.Now.Year + 1, 1, 1);
+    var firstDayThisYear = new DateTime(DateTime.Now.Year, 1, 1);
+    var today = DateTime.Now;
+    var daysInYear = (firstDayNextYear - firstDayThisYear).Days;
+    var daysSoFar = (today - firstDayThisYear).Days;
+    var daysSoFarIncludingToday = daysSoFar + 1;
+    var lastDayLastYear = new DateTime(DateTime.Now.Year, 1, 1) - TimeSpan.FromDays(1);
+    var yesterday = today - TimeSpan.FromDays(1);
+
+    var pushupsPerDay = 1f * Model.YearGoal / daysInYear;
+
+    var difference = Model.Pushups - daysSoFarIncludingToday * pushupsPerDay;
+}
+
+<section left>
+
+    <header>
+        <h1>PUSHUPS</h1>
+        @Model.Pushups ✔
+    </header>
+
+    @if (Model.YearGoal > 0)
+    {
+        <p>@(100 * Model.Pushups / Model.YearGoal)% of year goal of @Model.YearGoal</p>
+        <p>@(Model.YearGoal - Model.Pushups) or @Math.Round(pushupsPerDay) per day to do</p>
+    }
+    <p>@(Model.Pushups / (today - lastDayLastYear).Days) done per day</p>
+    @if (Model.YearGoal > 0)
+    {
+        <p>@Model.PushupsToday of @Math.Round(pushupsPerDay) done today</p>
+        <p>@Math.Abs(Math.Round(difference)) @(difference > 0 ? "ahead" : "behind")</p>
+    }
+
+    <svg viewBox="0 0 365 100" class="chart">
+        <polyline fill="hsla(32, 100%, 22%, 0.25)" stroke="none" stroke-width="0" points="@Model.SummedPushupsGraphBackground" transform="translate(0, 100) scale(1,-1)"></polyline>
+        <polyline fill="hsla(208, 100%, 22%, 0.25)" stroke="none" stroke-width="0" points="@Model.DailyPushupsGraphBackground" transform="translate(0, 100) scale(1,-1)"></polyline>
+        <polyline fill="none" stroke="hsla(208, 100%, 44%, 1)" stroke-width="1" stroke-linejoin="round" points="@Model.DailyPushupsGraph" transform="translate(0, 100) scale(1,-1)"></polyline>
+        <polyline fill="none" stroke="hsla(32, 100%, 44%, 1)" stroke-width="1" stroke-linejoin="round" points="@Model.SummedPushupsGraph" transform="translate(0, 100) scale(1,-1)"></polyline>
+        <polyline fill="none" stroke="white" stroke-width="1" points="0, 0, 365, 0" transform="translate(0, 100) scale(1,-1)"></polyline>
+        <polyline fill="none" stroke="white" stroke-width="1" points="0, 0, 0, 66" transform="translate(0, 100) scale(1,-1)"></polyline>
+    </svg>
+
+</section>
+
+@if (User.Identity.IsAuthenticated == true)
+{
+    <section right>
+        <header>
+            <h1>@User.Identity.Name.ToUpperInvariant()</h1>
+        </header>
+        <section style="position: relative; min-height: 0; display: flex; margin-bottom: 0.25rem">
+            <form action="/fitness/add" method="post" style="flex: 1">
+                <input type="hidden" name="amount" value="1">
+                <input type="hidden" name="training" value="pushups">
+                <input type="hidden" name="redirectto" value="/">
+                <input type="submit" value="+1">
+            </form>
+            <form action="/fitness/add" method="post" style="flex: 1">
+                <input type="hidden" name="amount" value="2">
+                <input type="hidden" name="training" value="pushups">
+                <input type="hidden" name="redirectto" value="/">
+                <input type="submit" value="+2">
+            </form>
+            <form action="/fitness/add" method="post" style="flex: 1">
+                <input type="hidden" name="amount" value="5">
+                <input type="hidden" name="training" value="pushups">
+                <input type="hidden" name="redirectto" value="/">
+                <input type="submit" value="+5">
+            </form>
+        </section>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="10">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 10 pushups">
+        </form>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="20">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 20 pushups">
+        </form>
+        <form action="/fitness/add" method="post">
+            <input type="hidden" name="amount" value="30">
+            <input type="hidden" name="training" value="pushups">
+            <input type="hidden" name="redirectto" value="/">
+            <input type="submit" value="add 30 pushups">
+        </form>
+    </section>
+}
