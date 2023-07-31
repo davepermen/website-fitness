@@ -8,7 +8,7 @@ namespace Davepermen.Website.Fitness.Pages
 {
     public class IndexModel : PageModel
     {
-        TrainingData trainingData;
+        TrainingData trainingData = new("davepermen", "pushups", DateTime.Now.Year);
 
         public int Pushups => trainingData.Sum;
 
@@ -21,7 +21,8 @@ namespace Davepermen.Website.Fitness.Pages
         public void OnGet([FromQuery] int? year, [FromQuery] string user, [FromQuery] string training)
         {
             training ??= "pushups";
-            user ??= (User.Identity.IsAuthenticated ? User.Identity.Name : "davepermen");
+
+            user ??= User?.Identity?.Name ?? "davepermen";
 
             year ??= DateTime.Now.Year;
 

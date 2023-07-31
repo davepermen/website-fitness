@@ -46,11 +46,11 @@
 
 </section>
 
-@if (User.Identity.IsAuthenticated == true)
+@if (User?.Identity?.IsAuthenticated == true)
 {
     <section right>
         <header>
-            <h1>@User.Identity.Name.ToUpperInvariant()</h1>
+            <h1>@User?.Identity?.Name?.ToUpperInvariant()</h1>
         </header>
         <section style="position: relative; min-height: 0; display: flex; margin-bottom: 0.25rem">
             <form action="/fitness/add" method="post" style="flex: 1">

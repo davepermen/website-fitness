@@ -1,21 +1,31 @@
+using Conesoft.Users;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Davepermen.Website.Fitness
-{
-    using Conesoft.Hosting;
-    public class Program
-    {
-        public static void Main(string[] args)
-        {
-            CreateHostBuilder(args).Build().Run();
-        }
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddUsers("Conesoft.Host.User", (Conesoft.Hosting.Host.GlobalStorage / "Users").Path);
+builder.Services.AddRazorPages();
+builder.Services.AddServerSideBlazor();
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-            Host.CreateHostBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
-    }
+var app = builder.Build();
+
+if (!app.Environment.IsDevelopment())
+{
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
 }
+
+app.UseHttpsRedirection();
+
+app.MapUsers();
+
+app.UseStaticFiles();
+
+app.UseRouting();
+
+app.MapRazorPages();
+app.MapControllers();
+
+app.Run();

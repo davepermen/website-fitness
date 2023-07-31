@@ -28,7 +28,7 @@
         @RenderBody()
     </main>
     <footer>
-        <a href="@(Context.Request.Path.Value.EndsWith("/menu") ? "/" : "/menu")">&#9776;</a>
+        <a href="@((Context.Request.Path.Value ?? "").EndsWith("/menu") ? "/" : "/menu")">&#9776;</a>
     </footer>
 </body>
 </html>
